@@ -3,31 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DJ LOOP PROTOTYPE</title>
+  <title>みんなでそっか！</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main id="game">
+
     <section id="titleScreen" class="screen active">
-      <h1>DJ LOOP</h1>
-      <p>RETRO VINYL RHYTHM</p>
-      <button id="startButton">START</button>
+      <h1>みんなで<br>そっか！</h1>
+      <p>RETRO SOKKA RHYTHM GAME</p>
+      <button id="startButton">プレイスタート</button>
     </section>
 
     <section id="playScreen" class="screen">
       <div class="topBar">
-        <span>TRACK 01</span>
+        <button id="homeButton" class="smallButton">タイトルへ</button>
+        <span>DJ MODE</span>
         <span id="timeText">00:00</span>
       </div>
 
-      <div class="vinylArea">
-        <div id="record" class="record">
-          <img src="record.png" alt="record" class="recordImg" />
-          <img src="jacket01.png" alt="jacket" class="labelImg" />
-        </div>
+      <div class="djArea">
+        <img src="dj.gif" alt="DJ animation" class="djGif" />
       </div>
 
-      <h2 id="trackTitle">♪ TRACK 01</h2>
+      <h2 id="trackTitle">♪ そっか</h2>
 
       <div class="progressOuter">
         <div id="progressBar" class="progressInner"></div>
@@ -35,15 +39,15 @@
 
       <div class="noteLane">
         <div id="notesContainer"></div>
-        <div class="judgeLine">PUSH LINE</div>
+        <div class="judgeLine">SOKKA LINE</div>
       </div>
 
       <div id="cueText" class="cueText">READY</div>
 
-      <button id="pushButton">PUSH!</button>
+      <button id="pushButton">そっか！</button>
 
       <div class="gaugeBox">
-        <span>GROOVE</span>
+        <span>みんなでそっかゲージ</span>
         <div class="gaugeOuter">
           <div id="grooveGauge" class="gaugeInner"></div>
         </div>
@@ -51,15 +55,18 @@
     </section>
 
     <section id="resultScreen" class="screen">
-      <h1>DJ RESULT</h1>
+      <h1>RESULT</h1>
       <p id="resultScore"></p>
       <p id="resultRank"></p>
-      <button id="retryButton">RETRY</button>
+
+      <button id="retryButton">もう一回</button>
+      <button id="resultHomeButton">タイトルへ</button>
     </section>
+
   </main>
 
   <audio id="music" src="track01.mp3"></audio>
-  <audio id="scratchSound" src="scratch.mp3"></audio>
+  <audio id="sokkaSound" src="sokka.mp3"></audio>
 
   <script src="game.js"></script>
 </body>

@@ -4,12 +4,13 @@ const resultScreen = document.getElementById("resultScreen");
 
 const startButton = document.getElementById("startButton");
 const retryButton = document.getElementById("retryButton");
+const homeButton = document.getElementById("homeButton");
+const resultHomeButton = document.getElementById("resultHomeButton");
 const pushButton = document.getElementById("pushButton");
 
 const music = document.getElementById("music");
-const scratchSound = document.getElementById("scratchSound");
+const sokkaSound = document.getElementById("sokkaSound");
 
-const record = document.getElementById("record");
 const cueText = document.getElementById("cueText");
 const progressBar = document.getElementById("progressBar");
 const grooveGauge = document.getElementById("grooveGauge");
@@ -18,24 +19,30 @@ const resultScore = document.getElementById("resultScore");
 const resultRank = document.getElementById("resultRank");
 const notesContainer = document.getElementById("notesContainer");
 
-// PUSHノーツのタイミング。1分弱の曲に合わせて調整してください。
 const notes = [
   { time: 4 },
-  { time: 7 },
+  { time: 6 },
+  { time: 8 },
   { time: 10 },
-  { time: 13 },
+  { time: 12 },
+  { time: 14 },
   { time: 16 },
-  { time: 20 },
+  { time: 18 },
+  { time: 22 },
   { time: 24 },
+  { time: 26 },
   { time: 28 },
-  { time: 32 },
+  { time: 30 },
+  { time: 34 },
   { time: 36 },
-
+  { time: 40 },
+  { time: 44 },
+  { time: 48 },
+  { time: 52 }
 ];
 
-const noteFallTime = 1.6; // 何秒前から落ち始めるか
-const laneHeight = 170;
-const judgeY = 122;
+const noteFallTime = 1.6;
+const judgeY = 128;
 
 let score = 0;
 let perfect = 0;
@@ -43,9 +50,8 @@ let good = 0;
 let miss = 0;
 let gameTimer = null;
 let isPlaying = false;
-let activeNotes = [];
 
-scratchSound.volume = 0.35;
+sokkaSound.volume = 0.9;
 
 function showScreen(screen) {
   titleScreen.classList.remove("active");
@@ -60,7 +66,6 @@ function resetGame() {
   good = 0;
   miss = 0;
   isPlaying = false;
-  activeNotes = [];
 
   notes.forEach(note => {
     note.hit = false;
@@ -71,7 +76,6 @@ function resetGame() {
   music.pause();
   music.currentTime = 0;
 
-  record.className = "record";
   cueText.className = "cueText";
   cueText.textContent = "READY";
   progressBar.style.width = "0%";
@@ -82,15 +86,19 @@ function resetGame() {
   clearInterval(gameTimer);
 }
 
+function goHome() {
+  resetGame();
+  showScreen(titleScreen);
+}
+
 function startGame() {
   resetGame();
   showScreen(playScreen);
 
-  cueText.textContent = "GET READY";
+  cueText.textContent = "みんなでそっか！";
 
   setTimeout(() => {
     cueText.textContent = "PLAY!";
-    record.classList.add("playing");
     music.play();
     isPlaying = true;
     gameTimer = setInterval(updateGame, 1000 / 60);
@@ -109,7 +117,7 @@ function updateGame() {
   const seconds = Math.floor(current % 60).toString().padStart(2, "0");
   timeText.textContent = `${minutes}:${seconds}`;
 
-  notes.forEach((note, index) => {
+  notes.forEach(note => {
     if (note.hit || note.missed) return;
 
     const diff = note.time - current;
@@ -118,7 +126,6 @@ function updateGame() {
       if (!note.element) {
         note.element = createNoteElement();
         notesContainer.appendChild(note.element);
-        activeNotes.push(note);
       }
 
       const progress = 1 - diff / noteFallTime;
@@ -129,7 +136,7 @@ function updateGame() {
     if (diff < -0.45) {
       note.missed = true;
       miss++;
-      cueText.textContent = "MISS";
+      cueText.textContent = "そっか...";
       cueText.className = "cueText miss";
       removeNote(note);
     }
@@ -143,7 +150,7 @@ function updateGame() {
 function createNoteElement() {
   const el = document.createElement("div");
   el.className = "note";
-  el.textContent = "PUSH!";
+  el.textContent = "そっか";
   return el;
 }
 
@@ -172,19 +179,21 @@ function push() {
     perfect++;
     score += 10;
     target.hit = true;
-    cueText.textContent = "PERFECT!";
+
+    cueText.textContent = "PERFECT そっか！";
     cueText.className = "cueText good";
-    playScratch();
-    scratchRecord();
+
+    playSokka();
     markHit(target);
   } else if (bestDiff <= 0.34) {
     good++;
     score += 6;
     target.hit = true;
-    cueText.textContent = "GOOD!";
+
+    cueText.textContent = "GOOD そっか！";
     cueText.className = "cueText good";
-    playScratch();
-    scratchRecord();
+
+    playSokka();
     markHit(target);
   } else {
     cueText.textContent = "TOO EARLY";
@@ -194,10 +203,18 @@ function push() {
   updateGauge();
 }
 
+function playSokka() {
+  sokkaSound.currentTime = 0;
+  sokkaSound.play().catch(() => {});
+}
+
 function markHit(note) {
   if (note.element) {
     note.element.classList.add("hit");
-    setTimeout(() => removeNote(note), 120);
+
+    setTimeout(() => {
+      removeNote(note);
+    }, 120);
   }
 }
 
@@ -205,22 +222,8 @@ function removeNote(note) {
   if (note.element && note.element.parentNode) {
     note.element.parentNode.removeChild(note.element);
   }
+
   note.element = null;
-}
-
-function playScratch() {
-  scratchSound.currentTime = 0;
-  scratchSound.play().catch(() => {});
-}
-
-function scratchRecord() {
-  record.classList.remove("playing");
-  record.classList.add("scratch");
-
-  setTimeout(() => {
-    record.classList.remove("scratch");
-    record.classList.add("playing");
-  }, 210);
 }
 
 function updateGauge() {
@@ -238,24 +241,24 @@ function finishGame() {
   const rate = Math.round((score / maxScore) * 100);
 
   let rank = "C";
-  let comment = "KEEP PRACTICING";
+  let comment = "そっか...";
 
   if (rate >= 90) {
     rank = "S";
-    comment = "LEGEND DJ!";
+    comment = "みんなでそっか！！";
   } else if (rate >= 75) {
     rank = "A";
-    comment = "NICE PUSH!";
+    comment = "ナイスそっか！";
   } else if (rate >= 55) {
     rank = "B";
-    comment = "GOOD GROOVE";
+    comment = "GOOD そっか";
   }
 
   resultScore.innerHTML = `
     PERFECT ${perfect}<br>
     GOOD ${good}<br>
     MISS ${miss}<br>
-    GROOVE ${rate}%
+    そっか率 ${rate}%
   `;
 
   resultRank.textContent = `RANK ${rank} - ${comment}`;
@@ -264,6 +267,9 @@ function finishGame() {
 
 startButton.addEventListener("click", startGame);
 retryButton.addEventListener("click", startGame);
+homeButton.addEventListener("click", goHome);
+resultHomeButton.addEventListener("click", goHome);
+
 pushButton.addEventListener("click", push);
 
 pushButton.addEventListener("touchstart", e => {
