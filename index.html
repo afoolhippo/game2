@@ -25,19 +25,22 @@
           <img src="record.png" alt="record" class="recordImg" />
           <img src="jacket01.png" alt="jacket" class="labelImg" />
         </div>
-
-        <img id="jacket" src="jacket01.png" alt="jacket" class="jacket" />
       </div>
 
-      <h2 id="trackTitle">♪ Wifiないと生きていけない</h2>
+      <h2 id="trackTitle">♪ TRACK 01</h2>
 
       <div class="progressOuter">
         <div id="progressBar" class="progressInner"></div>
       </div>
 
-      <div id="cueText" class="cueText">INSERT VINYL</div>
+      <div class="noteLane">
+        <div id="notesContainer"></div>
+        <div class="judgeLine">PUSH LINE</div>
+      </div>
 
-      <button id="scratchButton">SCRATCH</button>
+      <div id="cueText" class="cueText">READY</div>
+
+      <button id="pushButton">PUSH!</button>
 
       <div class="gaugeBox">
         <span>GROOVE</span>
@@ -57,8 +60,6 @@
 
   <audio id="music" src="track01.mp3"></audio>
   <audio id="scratchSound" src="scratch.mp3"></audio>
-  <audio id="goodSound" src="good.mp3"></audio>
-  <audio id="missSound" src="miss.mp3"></audio>
 
   <script src="game.js"></script>
 </body>
