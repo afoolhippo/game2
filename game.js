@@ -21,25 +21,22 @@ const notesContainer = document.getElementById("notesContainer");
 const game = document.getElementById("game");
 
 const notes = [
-  { time: 4 },
-  { time: 6 },
-  { time: 8 },
-  { time: 10 },
-  { time: 12 },
-  { time: 14 },
-  { time: 16 },
-  { time: 18 },
-  { time: 22 },
-  { time: 24 },
-  { time: 26 },
-  { time: 28 },
-  { time: 30 },
-  { time: 34 },
-  { time: 36 },
-  { time: 40 },
-  { time: 44 },
-  { time: 48 },
-  { time: 52 }
+  { time: 25.3 },
+  { time: 27.1 },
+  { time: 29 },
+  { time: 30.8 },
+  { time: 32.7 },
+  { time: 34.5 },
+  { time: 36.35 },
+  { time: 38.15 },
+  { time: 40.5 },
+  { time: 41.9 },
+  { time: 43.75 },
+  { time: 45.6 },
+  { time: 47.45 },
+  { time: 49.25 },
+  { time: 51.15 },
+  { time: 53 }
 ];
 
 const noteFallTime = 1.6;

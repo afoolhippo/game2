@@ -21,25 +21,23 @@
     </section>
 
     <section id="playScreen" class="screen">
+
       <div class="topBar">
-        <button id="homeButton" class="smallButton">タイトルへ</button>
-        <span>DJ MODE</span>
-        <span id="timeText">00:00</span>
+        <button id="homeButton" class="smallButton">EXIT</button>
       </div>
 
       <div class="djArea">
         <img src="dj.gif" alt="DJ animation" class="djGif" />
       </div>
 
-      <h2 id="trackTitle">♪ そっか</h2>
-
-      <div class="progressOuter">
-        <div id="progressBar" class="progressInner"></div>
+      <div class="trackRow">
+        <h2 id="trackTitle">♪ そっか</h2>
+        <span id="timeText">0:00 / 0:00</span>
       </div>
 
       <div class="noteLane">
         <div id="notesContainer"></div>
-        <div class="judgeLine">SOKKA LINE</div>
+        <div class="judgeLine"></div>
       </div>
 
       <div id="cueText" class="cueText">READY</div>
@@ -47,11 +45,12 @@
       <button id="pushButton">そっか！</button>
 
       <div class="gaugeBox">
-        <span>みんなでそっかゲージ</span>
+        <div class="gaugeLabel">ノリ</div>
         <div class="gaugeOuter">
           <div id="grooveGauge" class="gaugeInner"></div>
         </div>
       </div>
+
     </section>
 
     <section id="resultScreen" class="screen">
