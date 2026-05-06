@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DJ LOOP PROTOTYPE</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="game">
+    <section id="titleScreen" class="screen active">
+      <h1>DJ LOOP</h1>
+      <p>RETRO VINYL RHYTHM</p>
+      <button id="startButton">START</button>
+    </section>
+
+    <section id="playScreen" class="screen">
+      <div class="topBar">
+        <span>TRACK 01</span>
+        <span id="timeText">00:00</span>
+      </div>
+
+      <div class="vinylArea">
+        <div id="record" class="record">
+          <img src="record.png" alt="record" class="recordImg" />
+          <img src="jacket01.png" alt="jacket" class="labelImg" />
+        </div>
+
+        <img id="jacket" src="jacket01.png" alt="jacket" class="jacket" />
+      </div>
+
+      <h2 id="trackTitle">♪ Wifiないと生きていけない</h2>
+
+      <div class="progressOuter">
+        <div id="progressBar" class="progressInner"></div>
+      </div>
+
+      <div id="cueText" class="cueText">INSERT VINYL</div>
+
+      <button id="scratchButton">SCRATCH</button>
+
+      <div class="gaugeBox">
+        <span>GROOVE</span>
+        <div class="gaugeOuter">
+          <div id="grooveGauge" class="gaugeInner"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen">
+      <h1>DJ RESULT</h1>
+      <p id="resultScore"></p>
+      <p id="resultRank"></p>
+      <button id="retryButton">RETRY</button>
+    </section>
+  </main>
+
+  <audio id="music" src="track01.mp3"></audio>
+  <audio id="scratchSound" src="scratch.mp3"></audio>
+  <audio id="goodSound" src="good.mp3"></audio>
+  <audio id="missSound" src="miss.mp3"></audio>
+
+  <script src="game.js"></script>
+</body>
+</html>
