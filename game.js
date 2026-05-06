@@ -12,12 +12,13 @@ const music = document.getElementById("music");
 const sokkaSound = document.getElementById("sokkaSound");
 
 const cueText = document.getElementById("cueText");
-const progressBar = document.getElementById("progressBar");
 const grooveGauge = document.getElementById("grooveGauge");
 const timeText = document.getElementById("timeText");
 const resultScore = document.getElementById("resultScore");
 const resultRank = document.getElementById("resultRank");
 const notesContainer = document.getElementById("notesContainer");
+
+const game = document.getElementById("game");
 
 const notes = [
   { time: 4 },
@@ -78,9 +79,10 @@ function resetGame() {
 
   cueText.className = "cueText";
   cueText.textContent = "READY";
-  progressBar.style.width = "0%";
+
   grooveGauge.style.width = "0%";
-  timeText.textContent = "00:00";
+  timeText.textContent = "0:00 / 0:00";
+
   notesContainer.innerHTML = "";
 
   clearInterval(gameTimer);
@@ -111,11 +113,14 @@ function updateGame() {
   const current = music.currentTime;
   const duration = music.duration || 1;
 
-  progressBar.style.width = `${(current / duration) * 100}%`;
+  const currentMin = Math.floor(current / 60);
+  const currentSec = Math.floor(current % 60).toString().padStart(2, "0");
 
-  const minutes = Math.floor(current / 60);
-  const seconds = Math.floor(current % 60).toString().padStart(2, "0");
-  timeText.textContent = `${minutes}:${seconds}`;
+  const durationMin = Math.floor(duration / 60);
+  const durationSec = Math.floor(duration % 60).toString().padStart(2, "0");
+
+  timeText.textContent =
+    `${currentMin}:${currentSec} / ${durationMin}:${durationSec}`;
 
   notes.forEach(note => {
     if (note.hit || note.missed) return;
@@ -136,8 +141,10 @@ function updateGame() {
     if (diff < -0.45) {
       note.missed = true;
       miss++;
+
       cueText.textContent = "そっか...";
       cueText.className = "cueText miss";
+
       removeNote(note);
     }
   });
@@ -185,6 +192,9 @@ function push() {
 
     playSokka();
     markHit(target);
+
+    shakeScreen();
+
   } else if (bestDiff <= 0.34) {
     good++;
     score += 6;
@@ -195,12 +205,21 @@ function push() {
 
     playSokka();
     markHit(target);
+
   } else {
     cueText.textContent = "TOO EARLY";
     cueText.className = "cueText miss";
   }
 
   updateGauge();
+}
+
+function shakeScreen() {
+  game.classList.add("screenShake");
+
+  setTimeout(() => {
+    game.classList.remove("screenShake");
+  }, 120);
 }
 
 function playSokka() {
@@ -262,6 +281,7 @@ function finishGame() {
   `;
 
   resultRank.textContent = `RANK ${rank} - ${comment}`;
+
   showScreen(resultScreen);
 }
 

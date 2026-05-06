@@ -30,6 +30,18 @@ body {
   position: relative;
 }
 
+.screenShake {
+  animation: shake 0.12s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+
 .screen {
   display: none;
   width: 100%;
@@ -70,18 +82,17 @@ button:active {
 
 .smallButton {
   font-size: 12px;
-  padding: 5px 8px;
+  padding: 4px 8px;
+  opacity: 0.7;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .topBar {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  gap: 8px;
-  border: 4px solid var(--ink);
-  padding: 7px;
-  margin-bottom: 12px;
-  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 6px;
 }
 
 .djArea {
@@ -90,7 +101,7 @@ button:active {
   border: 4px solid var(--ink);
   background: var(--bg);
   overflow: hidden;
-  margin: 0 auto 10px;
+  margin: 0 auto 12px;
 }
 
 .djGif {
@@ -100,24 +111,21 @@ button:active {
   display: block;
 }
 
-/* gif全体を見せたい場合は上の object-fit: cover; を contain に変更 */
+.trackRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+
 #trackTitle {
   font-size: 20px;
-  margin: 8px 0;
+  margin: 0;
 }
 
-.progressOuter {
-  width: 100%;
-  height: 16px;
-  border: 3px solid var(--ink);
-  margin: 8px 0 12px;
-  background: var(--white);
-}
-
-.progressInner {
-  height: 100%;
-  width: 0%;
-  background: var(--ink);
+#timeText {
+  font-size: 16px;
 }
 
 .noteLane {
@@ -161,9 +169,6 @@ button:active {
   bottom: 22px;
   height: 5px;
   background: var(--ink);
-  font-size: 11px;
-  text-align: right;
-  padding-right: 8px;
 }
 
 .cueText {
@@ -177,7 +182,6 @@ button:active {
 }
 
 .cueText.miss {
-  color: var(--ink);
   opacity: 0.7;
 }
 
@@ -190,13 +194,18 @@ button:active {
 }
 
 .gaugeBox {
+  margin-top: 6px;
+  text-align: left;
+}
+
+.gaugeLabel {
   font-size: 16px;
+  margin-bottom: 6px;
 }
 
 .gaugeOuter {
   height: 20px;
   border: 3px solid var(--ink);
-  margin-top: 6px;
   background: var(--white);
 }
 
