@@ -40,7 +40,7 @@ const notes = [
 ];
 
 const noteFallTime = 1.6;
-const judgeY = 128;
+const judgeY = 115;
 
 let score = 0;
 let perfect = 0;
@@ -204,7 +204,7 @@ function push() {
     markHit(target);
 
   } else {
-    cueText.textContent = "TOO EARLY";
+    cueText.textContent = "早すぎ";
     cueText.className = "cueText miss";
   }
 
