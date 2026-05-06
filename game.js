@@ -58,7 +58,7 @@ const noteFallTime = 1.6;
 const judgeY = 134;
 
 // 全体のタイミング補正。遅く聞こえる場合は 0.05〜0.10 に調整。
-const noteOffset = 0.05;
+const noteOffset = 0.15;
 
 let score = 0;
 let perfect = 0;
