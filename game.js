@@ -55,7 +55,10 @@ const notes = [
 ];
 
 const noteFallTime = 1.6;
-const judgeY = 115;
+const judgeY = 112;
+
+// 全体のタイミング補正。遅く聞こえる場合は 0.05〜0.10 に調整。
+const noteOffset = 0.05;
 
 let score = 0;
 let perfect = 0;
@@ -122,11 +125,12 @@ function startGame() {
 function updateGame() {
   if (!isPlaying) return;
 
-  const current = music.currentTime;
+  const current = music.currentTime + noteOffset;
+  const rawCurrent = music.currentTime;
   const duration = music.duration || 1;
 
-  const currentMin = Math.floor(current / 60);
-  const currentSec = Math.floor(current % 60).toString().padStart(2, "0");
+  const currentMin = Math.floor(rawCurrent / 60);
+  const currentSec = Math.floor(rawCurrent % 60).toString().padStart(2, "0");
 
   const durationMin = Math.floor(duration / 60);
   const durationSec = Math.floor(duration % 60).toString().padStart(2, "0");
@@ -169,14 +173,13 @@ function updateGame() {
 function createNoteElement() {
   const el = document.createElement("div");
   el.className = "note";
-  el.textContent = "そっか";
   return el;
 }
 
 function push() {
   if (!isPlaying) return;
 
-  const current = music.currentTime;
+  const current = music.currentTime + noteOffset;
 
   let target = null;
   let bestDiff = Infinity;
@@ -204,7 +207,6 @@ function push() {
 
     playSokka();
     markHit(target);
-
     shakeScreen();
 
   } else if (bestDiff <= 0.34) {
@@ -219,7 +221,7 @@ function push() {
     markHit(target);
 
   } else {
-    cueText.textContent = "早すぎ";
+    cueText.textContent = "TOO EARLY";
     cueText.className = "cueText miss";
   }
 
