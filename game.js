@@ -132,7 +132,7 @@ function startGame() {
   resetGame();
   showScreen(playScreen);
 
-  cueText.textContent = "‚İ‚ñ‚È‚Å‚»‚Á‚©I";
+  cueText.textContent = "ã¿ã‚“ãªã§ãã£ã‹ï¼";
 
   setTimeout(() => {
     cueText.textContent = "PLAY!";
@@ -177,7 +177,7 @@ function updateGame() {
       note.missed = true;
       miss++;
 
-      cueText.textContent = "‚»‚Á‚©...";
+      cueText.textContent = "ãã£ã‹...";
       cueText.className = "cueText miss";
 
       removeNote(note);
@@ -221,7 +221,7 @@ function push() {
     score += 10;
     target.hit = true;
 
-    cueText.textContent = "PERFECT ‚»‚Á‚©I";
+    cueText.textContent = "PERFECT ãã£ã‹ï¼";
     cueText.className = "cueText good";
 
     playSokka();
@@ -233,7 +233,7 @@ function push() {
     score += 6;
     target.hit = true;
 
-    cueText.textContent = "GOOD ‚»‚Á‚©I";
+    cueText.textContent = "GOOD ãã£ã‹ï¼";
     cueText.className = "cueText good";
 
     playSokka();
@@ -293,24 +293,24 @@ function finishGame() {
   const rate = Math.round((score / maxScore) * 100);
 
   let rank = "C";
-  let comment = "‚»‚Á‚©...";
+  let comment = "ãã£ã‹...";
 
   if (rate >= 90) {
     rank = "S";
-    comment = "‚İ‚ñ‚È‚Å‚»‚Á‚©II";
+    comment = "ã¿ã‚“ãªã§ãã£ã‹ï¼ï¼";
   } else if (rate >= 75) {
     rank = "A";
-    comment = "ƒiƒCƒX‚»‚Á‚©I";
+    comment = "ãƒŠã‚¤ã‚¹ãã£ã‹ï¼";
   } else if (rate >= 55) {
     rank = "B";
-    comment = "GOOD ‚»‚Á‚©";
+    comment = "GOOD ãã£ã‹";
   }
 
   resultScore.innerHTML = `
     PERFECT ${perfect}<br>
     GOOD ${good}<br>
     MISS ${miss}<br>
-    ‚»‚Á‚©—¦ ${rate}%
+    ãã£ã‹ç‡ ${rate}%
   `;
 
   resultRank.textContent = `RANK ${rank} - ${comment}`;
