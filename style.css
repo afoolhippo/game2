@@ -10,6 +10,12 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -17,13 +23,19 @@ body {
   font-family: "DotGothic16", monospace;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
+  min-height: 100svh;
+  padding: max(6px, env(safe-area-inset-top)) 6px max(10px, env(safe-area-inset-bottom));
+  overflow: hidden;
 }
 
 #game {
-  width: min(100vw, 430px);
-  height: min(100vh, 820px);
+  width: min(100%, 430px);
+  height: min(calc(100vh - 16px), 820px);
+  height: min(calc(100svh - 16px), 820px);
+  max-height: calc(100vh - 16px);
+  max-height: calc(100svh - 16px);
   background: var(--bg);
   border: 5px solid var(--ink);
   overflow: hidden;
@@ -142,10 +154,6 @@ button:active {
   inset: 0;
 }
 
-/* =========================
-   横バー型ノーツ
-========================= */
-
 .note {
   position: absolute;
   left: 50%;
@@ -162,10 +170,6 @@ button:active {
   background: var(--accent);
 }
 
-/* =========================
-   判定ライン
-========================= */
-
 .judgeLine {
   position: absolute;
   left: 8%;
@@ -174,10 +178,6 @@ button:active {
   height: 4px;
   background: var(--ink);
 }
-
-/* =========================
-   テキスト
-========================= */
 
 .cueText {
   min-height: 32px;
@@ -193,10 +193,6 @@ button:active {
   opacity: 0.7;
 }
 
-/* =========================
-   ボタン
-========================= */
-
 #pushButton {
   width: 86%;
   margin: 8px auto 16px;
@@ -204,10 +200,6 @@ button:active {
   font-size: 30px;
   background: var(--white);
 }
-
-/* =========================
-   ゲージ
-========================= */
 
 .gaugeBox {
   margin-top: 6px;
@@ -231,10 +223,6 @@ button:active {
   background: var(--ink);
 }
 
-/* =========================
-   リザルト
-========================= */
-
 #resultScreen p {
   font-size: 22px;
   line-height: 1.7;
@@ -242,4 +230,123 @@ button:active {
 
 #resultHomeButton {
   margin-top: 16px;
+}
+
+/* =========================
+   高さが少し足りないスマホ向け
+========================= */
+
+@media (max-height: 760px) {
+  .screen {
+    padding: 10px 12px;
+  }
+
+  h1 {
+    margin-top: 52px;
+    font-size: 38px;
+  }
+
+  .topBar {
+    margin-bottom: 4px;
+  }
+
+  .djArea {
+    height: 210px;
+    margin-bottom: 8px;
+  }
+
+  .trackRow {
+    margin-bottom: 6px;
+  }
+
+  .noteLane {
+    height: 170px;
+    margin: 8px 0;
+  }
+
+  .cueText {
+    min-height: 26px;
+    font-size: 21px;
+    margin: 6px 0;
+  }
+
+  #pushButton {
+    font-size: 26px;
+    padding: 9px 16px;
+    margin: 6px auto 10px;
+  }
+
+  .gaugeBox {
+    margin-top: 2px;
+  }
+
+  .gaugeLabel {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .gaugeOuter {
+    height: 17px;
+  }
+
+  #resultScreen p {
+    font-size: 19px;
+    line-height: 1.55;
+  }
+
+  #resultHomeButton {
+    margin-top: 10px;
+  }
+}
+
+/* =========================
+   さらに低い端末向け
+========================= */
+
+@media (max-height: 680px) {
+  .screen {
+    padding: 8px 10px;
+  }
+
+  h1 {
+    margin-top: 36px;
+    font-size: 34px;
+  }
+
+  .djArea {
+    height: 180px;
+  }
+
+  .noteLane {
+    height: 155px;
+  }
+
+  #trackTitle {
+    font-size: 17px;
+  }
+
+  #timeText {
+    font-size: 13px;
+  }
+
+  .cueText {
+    font-size: 19px;
+    margin: 5px 0;
+  }
+
+  #pushButton {
+    font-size: 24px;
+    padding: 8px 14px;
+    margin-bottom: 8px;
+  }
+
+  button {
+    font-size: 19px;
+    padding: 9px 16px;
+  }
+
+  #resultScreen p {
+    font-size: 17px;
+    line-height: 1.45;
+  }
 }
