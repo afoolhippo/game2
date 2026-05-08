@@ -24,18 +24,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: max(6px, env(safe-area-inset-top)) 6px max(10px, env(safe-area-inset-bottom));
+  min-height: var(--app-height, 100dvh);
+  padding: 4px 6px;
   overflow: hidden;
 }
 
 #game {
   width: min(100%, 430px);
-  height: min(calc(100vh - 16px), 820px);
-  height: min(calc(100svh - 16px), 820px);
-  max-height: calc(100vh - 16px);
-  max-height: calc(100svh - 16px);
+  height: calc(var(--app-height, 100dvh) - 8px);
+  max-height: 820px;
   background: var(--bg);
   border: 5px solid var(--ink);
   overflow: hidden;

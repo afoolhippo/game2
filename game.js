@@ -1,3 +1,21 @@
+function setAppHeight() {
+  const height = window.visualViewport
+    ? window.visualViewport.height
+    : window.innerHeight;
+
+  document.documentElement.style.setProperty("--app-height", `${height}px`);
+}
+
+setAppHeight();
+
+window.addEventListener("resize", setAppHeight);
+window.addEventListener("orientationchange", setAppHeight);
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", setAppHeight);
+  window.visualViewport.addEventListener("scroll", setAppHeight);
+}
+
 const titleScreen = document.getElementById("titleScreen");
 const playScreen = document.getElementById("playScreen");
 const resultScreen = document.getElementById("resultScreen");
@@ -56,8 +74,6 @@ const notes = [
 
 const noteFallTime = 1.6;
 const judgeY = 134;
-
-// å…¨ä½“ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°è£œæ­£ã€‚é…ãèã“ãˆã‚‹å ´åˆã¯ 0.05ã€œ0.10 ã«èª¿æ•´ã€‚
 const noteOffset = 0.15;
 
 let score = 0;
@@ -74,6 +90,8 @@ function showScreen(screen) {
   playScreen.classList.remove("active");
   resultScreen.classList.remove("active");
   screen.classList.add("active");
+
+  setAppHeight();
 }
 
 function resetGame() {
@@ -101,6 +119,8 @@ function resetGame() {
   notesContainer.innerHTML = "";
 
   clearInterval(gameTimer);
+
+  setAppHeight();
 }
 
 function goHome() {
@@ -112,7 +132,7 @@ function startGame() {
   resetGame();
   showScreen(playScreen);
 
-  cueText.textContent = "ã¿ã‚“ãªã§ãã£ã‹ï¼";
+  cueText.textContent = "‚İ‚ñ‚È‚Å‚»‚Á‚©I";
 
   setTimeout(() => {
     cueText.textContent = "PLAY!";
@@ -135,8 +155,7 @@ function updateGame() {
   const durationMin = Math.floor(duration / 60);
   const durationSec = Math.floor(duration % 60).toString().padStart(2, "0");
 
-  timeText.textContent =
-    `${currentMin}:${currentSec} / ${durationMin}:${durationSec}`;
+  timeText.textContent = `${currentMin}:${currentSec} / ${durationMin}:${durationSec}`;
 
   notes.forEach(note => {
     if (note.hit || note.missed) return;
@@ -158,7 +177,7 @@ function updateGame() {
       note.missed = true;
       miss++;
 
-      cueText.textContent = "ãã£ã‹...";
+      cueText.textContent = "‚»‚Á‚©...";
       cueText.className = "cueText miss";
 
       removeNote(note);
@@ -202,7 +221,7 @@ function push() {
     score += 10;
     target.hit = true;
 
-    cueText.textContent = "PERFECT ãã£ã‹ï¼";
+    cueText.textContent = "PERFECT ‚»‚Á‚©I";
     cueText.className = "cueText good";
 
     playSokka();
@@ -214,7 +233,7 @@ function push() {
     score += 6;
     target.hit = true;
 
-    cueText.textContent = "GOOD ãã£ã‹ï¼";
+    cueText.textContent = "GOOD ‚»‚Á‚©I";
     cueText.className = "cueText good";
 
     playSokka();
@@ -274,24 +293,24 @@ function finishGame() {
   const rate = Math.round((score / maxScore) * 100);
 
   let rank = "C";
-  let comment = "ãã£ã‹...";
+  let comment = "‚»‚Á‚©...";
 
   if (rate >= 90) {
     rank = "S";
-    comment = "ã¿ã‚“ãªã§ãã£ã‹ï¼ï¼";
+    comment = "‚İ‚ñ‚È‚Å‚»‚Á‚©II";
   } else if (rate >= 75) {
     rank = "A";
-    comment = "ãƒŠã‚¤ã‚¹ãã£ã‹ï¼";
+    comment = "ƒiƒCƒX‚»‚Á‚©I";
   } else if (rate >= 55) {
     rank = "B";
-    comment = "GOOD ãã£ã‹";
+    comment = "GOOD ‚»‚Á‚©";
   }
 
   resultScore.innerHTML = `
     PERFECT ${perfect}<br>
     GOOD ${good}<br>
     MISS ${miss}<br>
-    ãã£ã‹ç‡ ${rate}%
+    ‚»‚Á‚©—¦ ${rate}%
   `;
 
   resultRank.textContent = `RANK ${rank} - ${comment}`;
