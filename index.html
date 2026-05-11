@@ -2,71 +2,151 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>みんなでそっか！</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+  <title>みんなでそっか！</title>
 
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+
   <main id="game">
 
+    <!-- タイトル -->
+
     <section id="titleScreen" class="screen active">
-      <h1>みんなで<br>そっか！</h1>
-      <p>RETRO RHYTHM GAME</p>
-      <button id="startButton">プレイスタート</button>
+
+      <img
+        src="title.png"
+        alt="みんなでそっか！"
+        id="titleImage"
+      />
+
+      <p id="ruleText">
+        タイミングよく<br>
+        「そっか！」を決めよう！
+      </p>
+
+      <button id="startButton">
+        タップしてスタート
+      </button>
+
     </section>
+
+    <!-- プレイ -->
 
     <section id="playScreen" class="screen">
 
-      <div class="topBar">
-        <button id="homeButton" class="smallButton">EXIT</button>
+      <button id="backButton">
+        タイトルへ戻る
+      </button>
+
+      <div class="vinylArea">
+
+        <div id="record" class="record">
+
+          <img
+            src="record.png"
+            class="recordImg"
+          />
+
+          <img
+            src="jacket01.png"
+            class="labelImg"
+          />
+
+        </div>
+
+        <img
+          id="jacket"
+          src="jacket01.png"
+          class="jacket"
+        />
+
       </div>
 
-      <div class="djArea">
-        <img src="dj.gif" alt="DJ animation" class="djGif" />
+      <div class="trackInfo">
+
+        <span id="trackTitle">
+          ♪ そっか！
+        </span>
+
+        <span id="timeText">
+          0:00 / 0:00
+        </span>
+
       </div>
 
-      <div class="trackRow">
-        <h2 id="trackTitle">♪ そっか</h2>
-        <span id="timeText">0:00 / 0:00</span>
+      <div id="cueText" class="cueText">
+        INSERT VINYL
       </div>
 
-      <div class="noteLane">
-        <div id="notesContainer"></div>
-        <div class="judgeLine"></div>
-      </div>
-
-      <div id="cueText" class="cueText">READY</div>
-
-      <button id="pushButton">そっか！</button>
+      <button id="scratchButton">
+        SCRATCH
+      </button>
 
       <div class="gaugeBox">
-        <div class="gaugeLabel">ノリ</div>
+
+        <span>盛り上がり</span>
+
         <div class="gaugeOuter">
-          <div id="grooveGauge" class="gaugeInner"></div>
+          <div
+            id="grooveGauge"
+            class="gaugeInner"
+          ></div>
         </div>
+
       </div>
 
     </section>
 
-    <section id="resultScreen" class="screen">
-      <h1>RESULT</h1>
-      <p id="resultScore"></p>
-      <p id="resultRank"></p>
+    <!-- リザルト -->
 
-      <button id="retryButton">もう一回</button>
-      <button id="resultHomeButton">タイトルへ</button>
+    <section id="resultScreen" class="screen">
+
+      <h2 id="rankTitle">
+        そっか見習い
+      </h2>
+
+      <img
+        id="resultImage"
+        src="result_bad.png"
+        alt="result"
+      />
+
+      <div id="resultScore"></div>
+
+      <div class="resultButtons">
+
+        <button id="shareButton">
+          Xでシェア
+        </button>
+
+        <button id="retryButton">
+          もう1回遊ぶ
+        </button>
+
+        <button id="homeButton">
+          カバゲーセンへ
+        </button>
+
+      </div>
+
     </section>
 
   </main>
 
   <audio id="music" src="track01.mp3"></audio>
-  <audio id="sokkaSound" src="sokka.mp3"></audio>
+
+  <audio id="scratchSound" src="scratch.mp3"></audio>
+  <audio id="goodSound" src="good.mp3"></audio>
+  <audio id="missSound" src="miss.mp3"></audio>
 
   <script src="game.js"></script>
+
 </body>
 </html>
