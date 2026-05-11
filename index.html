@@ -15,16 +15,30 @@
   <main id="game">
 
     <section id="titleScreen" class="screen active">
-      <h1>みんなで<br>そっか！</h1>
-      <p>RETRO RHYTHM GAME</p>
-      <button id="startButton">プレイスタート</button>
+      <div class="titleInner">
+        <img
+          id="titleLogo"
+          class="titleLogo"
+          src="title.png"
+          alt="みんなでそっか！"
+        />
+
+        <p class="ruleText">
+          「そっか！」のタイミングで<br>
+          ボタンを押せ！<br>
+          みんなでノろう！
+        </p>
+
+        <button id="startButton" class="mainButton">
+          タップしてスタート
+        </button>
+      </div>
     </section>
 
     <section id="playScreen" class="screen">
-
-      <div class="topBar">
-        <button id="homeButton" class="smallButton">EXIT</button>
-      </div>
+      <button id="homeButton" class="backButton">
+        タイトルへ
+      </button>
 
       <div class="djArea">
         <img src="dj.gif" alt="DJ animation" class="djGif" />
@@ -50,16 +64,39 @@
           <div id="grooveGauge" class="gaugeInner"></div>
         </div>
       </div>
-
     </section>
 
     <section id="resultScreen" class="screen">
-      <h1>RESULT</h1>
-      <p id="resultScore"></p>
-      <p id="resultRank"></p>
+      <div class="resultInner">
+        <img
+          id="resultCharacter"
+          class="resultCharacter"
+          src="result_normal.png"
+          alt="結果キャラクター"
+        />
 
-      <button id="retryButton">もう一回</button>
-      <button id="resultHomeButton">タイトルへ</button>
+        <h1 id="resultTitle" class="resultTitle">
+          ノリノリそっか
+        </h1>
+
+        <p id="resultComment" class="resultComment"></p>
+
+        <p id="resultScore" class="resultScore"></p>
+
+        <div class="resultButtons">
+          <button id="shareButton" class="resultButton">
+            Xでシェア
+          </button>
+
+          <button id="retryButton" class="resultButton">
+            もう1回遊ぶ
+          </button>
+
+          <button id="arcadeButton" class="resultButton">
+            カバゲーセンへ
+          </button>
+        </div>
+      </div>
     </section>
 
   </main>

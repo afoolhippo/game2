@@ -20,10 +20,13 @@ const titleScreen = document.getElementById("titleScreen");
 const playScreen = document.getElementById("playScreen");
 const resultScreen = document.getElementById("resultScreen");
 
+const titleLogo = document.getElementById("titleLogo");
+
 const startButton = document.getElementById("startButton");
 const retryButton = document.getElementById("retryButton");
 const homeButton = document.getElementById("homeButton");
-const resultHomeButton = document.getElementById("resultHomeButton");
+const shareButton = document.getElementById("shareButton");
+const arcadeButton = document.getElementById("arcadeButton");
 const pushButton = document.getElementById("pushButton");
 
 const music = document.getElementById("music");
@@ -32,11 +35,17 @@ const sokkaSound = document.getElementById("sokkaSound");
 const cueText = document.getElementById("cueText");
 const grooveGauge = document.getElementById("grooveGauge");
 const timeText = document.getElementById("timeText");
-const resultScore = document.getElementById("resultScore");
-const resultRank = document.getElementById("resultRank");
-const notesContainer = document.getElementById("notesContainer");
 
+const resultCharacter = document.getElementById("resultCharacter");
+const resultTitle = document.getElementById("resultTitle");
+const resultComment = document.getElementById("resultComment");
+const resultScore = document.getElementById("resultScore");
+
+const notesContainer = document.getElementById("notesContainer");
 const game = document.getElementById("game");
+
+const GAME_URL = "https://afoolhippo.github.io/game2/";
+const ARCADE_URL = "https://afoolhippo.github.io/home/?skipTitle=1";
 
 const notes = [
   { time: 10.61 },
@@ -80,8 +89,11 @@ let score = 0;
 let perfect = 0;
 let good = 0;
 let miss = 0;
+let lastRate = 0;
+let lastTitle = "";
 let gameTimer = null;
 let isPlaying = false;
+let isStarting = false;
 
 sokkaSound.volume = 0.9;
 
@@ -99,7 +111,10 @@ function resetGame() {
   perfect = 0;
   good = 0;
   miss = 0;
+  lastRate = 0;
+  lastTitle = "";
   isPlaying = false;
+  isStarting = false;
 
   notes.forEach(note => {
     note.hit = false;
@@ -123,22 +138,35 @@ function resetGame() {
   setAppHeight();
 }
 
-function goHome() {
+function goTitle() {
   resetGame();
   showScreen(titleScreen);
 }
 
 function startGame() {
+  if (isStarting || isPlaying) return;
+
   resetGame();
+  isStarting = true;
+
   showScreen(playScreen);
 
   cueText.textContent = "みんなでそっか！";
 
   setTimeout(() => {
     cueText.textContent = "PLAY!";
-    music.play();
-    isPlaying = true;
-    gameTimer = setInterval(updateGame, 1000 / 60);
+
+    music.currentTime = 0;
+
+    music.play().then(() => {
+      isPlaying = true;
+      isStarting = false;
+      gameTimer = setInterval(updateGame, 1000 / 60);
+    }).catch(() => {
+      isPlaying = true;
+      isStarting = false;
+      gameTimer = setInterval(updateGame, 1000 / 60);
+    });
   }, 900);
 }
 
@@ -155,7 +183,8 @@ function updateGame() {
   const durationMin = Math.floor(duration / 60);
   const durationSec = Math.floor(duration % 60).toString().padStart(2, "0");
 
-  timeText.textContent = `${currentMin}:${currentSec} / ${durationMin}:${durationSec}`;
+  timeText.textContent =
+    `${currentMin}:${currentSec} / ${durationMin}:${durationSec}`;
 
   notes.forEach(note => {
     if (note.hit || note.missed) return;
@@ -181,6 +210,7 @@ function updateGame() {
       cueText.className = "cueText miss";
 
       removeNote(note);
+      updateGauge();
     }
   });
 
@@ -286,25 +316,38 @@ function updateGauge() {
 
 function finishGame() {
   isPlaying = false;
+  isStarting = false;
   clearInterval(gameTimer);
   music.pause();
 
   const maxScore = notes.length * 10;
   const rate = Math.round((score / maxScore) * 100);
 
-  let rank = "C";
-  let comment = "そっか...";
+  lastRate = rate;
+
+  let title = "";
+  let comment = "";
+  let image = "";
 
   if (rate >= 90) {
-    rank = "S";
-    comment = "みんなでそっか！！";
-  } else if (rate >= 75) {
-    rank = "A";
-    comment = "ナイスそっか！";
-  } else if (rate >= 55) {
-    rank = "B";
-    comment = "GOOD そっか";
+    title = "そっかマスター";
+    comment = "完璧な“そっか”だった！";
+    image = "result_good.png";
+  } else if (rate >= 60) {
+    title = "ノリノリそっか";
+    comment = "いい感じに“そっか”できた！";
+    image = "result_normal.png";
+  } else {
+    title = "そっか修行中";
+    comment = "まだまだ“そっか”できる！";
+    image = "result_bad.png";
   }
+
+  lastTitle = title;
+
+  resultCharacter.src = image;
+  resultTitle.textContent = title;
+  resultComment.textContent = comment;
 
   resultScore.innerHTML = `
     PERFECT ${perfect}<br>
@@ -313,15 +356,74 @@ function finishGame() {
     そっか率 ${rate}%
   `;
 
-  resultRank.textContent = `RANK ${rank} - ${comment}`;
-
   showScreen(resultScreen);
 }
 
+function shareResult() {
+  const rate = lastRate || 0;
+
+  let text = "";
+
+  if (rate >= 90) {
+    text =
+`みんなでそっか！！🎧✨
+
+そっか率 ${rate}%
+PERFECT ${perfect}
+
+無料ブラウザゲーム
+「みんなでそっか！」
+
+${GAME_URL}
+
+#みんなでそっか
+#カバゲーセン`;
+  } else if (rate >= 60) {
+    text =
+`ノリノリそっか！🎵
+
+そっか率 ${rate}%
+
+無料ブラウザゲーム
+「みんなでそっか！」
+
+${GAME_URL}
+
+#みんなでそっか
+#カバゲーセン`;
+  } else {
+    text =
+`そっか修行中…🥺
+
+そっか率 ${rate}%
+
+無料ブラウザゲーム
+「みんなでそっか！」
+
+${GAME_URL}
+
+#みんなでそっか
+#カバゲーセン`;
+  }
+
+  const shareUrl =
+    "https://twitter.com/intent/tweet?text=" +
+    encodeURIComponent(text);
+
+  window.open(shareUrl, "_blank");
+}
+
 startButton.addEventListener("click", startGame);
-retryButton.addEventListener("click", startGame);
-homeButton.addEventListener("click", goHome);
-resultHomeButton.addEventListener("click", goHome);
+titleLogo.addEventListener("click", startGame);
+
+retryButton.addEventListener("click", goTitle);
+homeButton.addEventListener("click", goTitle);
+
+shareButton.addEventListener("click", shareResult);
+
+arcadeButton.addEventListener("click", () => {
+  location.href = ARCADE_URL;
+});
 
 pushButton.addEventListener("click", push);
 
