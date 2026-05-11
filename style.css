@@ -76,26 +76,36 @@ button:active {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+
+  justify-content: flex-start;
   align-items: center;
+
   gap: 16px;
+
+  padding-top: 24px;
 }
 
 .titleLogo {
   width: min(92%, 360px);
-  max-height: 330px;
+  max-height: 300px;
+
   object-fit: contain;
   image-rendering: pixelated;
   cursor: pointer;
+
+  margin-top: 4px;
 }
 
 .ruleText {
   margin: 0;
   font-size: 17px;
   line-height: 1.65;
+
   background: var(--soft);
   border: 3px solid var(--ink);
+
   padding: 10px 12px;
+
   width: min(92%, 360px);
 }
 
@@ -114,19 +124,25 @@ button:active {
   top: 8px;
   right: 8px;
   z-index: 30;
+
   font-size: 12px;
   padding: 5px 9px;
+
   border: 3px solid var(--ink);
   background: var(--white);
+
   box-shadow: none;
 }
 
 .djArea {
   width: 100%;
   height: 250px;
+
   border: 4px solid var(--ink);
   background: var(--bg);
+
   overflow: hidden;
+
   margin: 34px auto 12px;
 }
 
@@ -135,6 +151,7 @@ button:active {
   height: 100%;
   object-fit: cover;
   display: block;
+
   image-rendering: pixelated;
 }
 
@@ -142,6 +159,7 @@ button:active {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   margin-bottom: 8px;
   padding: 0 2px;
 }
@@ -157,10 +175,15 @@ button:active {
 
 .noteLane {
   position: relative;
+
   height: 185px;
+
   border: 4px solid var(--ink);
+
   overflow: hidden;
+
   margin: 10px 0;
+
   background: rgba(255, 255, 255, 0.12);
 }
 
@@ -171,11 +194,15 @@ button:active {
 
 .note {
   position: absolute;
+
   left: 50%;
   transform: translateX(-50%);
+
   width: 42%;
   height: 12px;
+
   background: var(--white);
+
   border-radius: 999px;
 }
 
@@ -185,10 +212,13 @@ button:active {
 
 .judgeLine {
   position: absolute;
+
   left: 8%;
   right: 8%;
   bottom: 22px;
+
   height: 4px;
+
   background: var(--ink);
 }
 
@@ -208,9 +238,13 @@ button:active {
 
 #pushButton {
   width: 86%;
+
   margin: 8px auto 16px;
+
   display: block;
+
   font-size: 30px;
+
   padding: 12px 18px;
 }
 
@@ -226,13 +260,16 @@ button:active {
 
 .gaugeOuter {
   height: 20px;
+
   border: 3px solid var(--ink);
+
   background: var(--white);
 }
 
 .gaugeInner {
   height: 100%;
   width: 0%;
+
   background: var(--ink);
 }
 
@@ -242,54 +279,70 @@ button:active {
 
 .resultInner {
   height: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  padding-top: 6px;
 }
 
 .resultCharacter {
   width: min(48%, 190px);
   max-height: 190px;
+
   object-fit: contain;
   image-rendering: pixelated;
-  margin-top: 12px;
+
+  margin-top: 6px;
 }
 
 .resultTitle {
-  margin: 8px 0 4px;
+  margin: 4px 0 2px;
+
   font-size: 34px;
   line-height: 1.2;
 }
 
 .resultComment {
-  margin: 4px 0 8px;
+  margin: 2px 0 6px;
+
   font-size: 17px;
   line-height: 1.45;
 }
 
 .resultScore {
-  margin: 4px 0 12px;
+  margin: 4px 0 8px;
+
   font-size: 18px;
   line-height: 1.55;
+
   background: var(--soft);
   border: 3px solid var(--ink);
+
   padding: 8px 10px;
+
   width: min(92%, 350px);
 }
 
 .resultButtons {
   width: min(92%, 350px);
+
   display: flex;
   flex-direction: column;
+
   gap: 10px;
-  margin-top: auto;
-  margin-bottom: 10px;
+
+  margin-top: 10px;
 }
 
 .resultButton {
   width: 100%;
+
   font-size: 20px;
+
   padding: 10px 14px;
+
   background: var(--white);
 }
 
@@ -314,21 +367,24 @@ button:active {
 ========================= */
 
 @media (max-height: 760px) {
+
   .screen {
     padding: 10px 12px;
   }
 
   .titleInner {
     gap: 12px;
+    padding-top: 16px;
   }
 
   .titleLogo {
-    max-height: 270px;
+    max-height: 250px;
   }
 
   .ruleText {
     font-size: 15px;
     line-height: 1.5;
+
     padding: 8px 10px;
   }
 
@@ -339,6 +395,7 @@ button:active {
 
   .djArea {
     height: 210px;
+
     margin-top: 30px;
     margin-bottom: 8px;
   }
@@ -360,7 +417,9 @@ button:active {
 
   #pushButton {
     font-size: 26px;
+
     padding: 9px 16px;
+
     margin: 6px auto 10px;
   }
 
@@ -380,7 +439,8 @@ button:active {
   .resultCharacter {
     width: min(42%, 150px);
     max-height: 150px;
-    margin-top: 4px;
+
+    margin-top: 2px;
   }
 
   .resultTitle {
@@ -394,12 +454,12 @@ button:active {
   .resultScore {
     font-size: 16px;
     line-height: 1.45;
+
     padding: 7px 8px;
   }
 
   .resultButtons {
     gap: 8px;
-    margin-bottom: 4px;
   }
 
   .resultButton {
@@ -413,12 +473,17 @@ button:active {
 ========================= */
 
 @media (max-height: 680px) {
+
   .screen {
     padding: 8px 10px;
   }
 
+  .titleInner {
+    padding-top: 10px;
+  }
+
   .titleLogo {
-    max-height: 230px;
+    max-height: 220px;
   }
 
   .ruleText {
@@ -455,7 +520,9 @@ button:active {
 
   #pushButton {
     font-size: 24px;
+
     padding: 8px 14px;
+
     margin-bottom: 8px;
   }
 
@@ -476,6 +543,7 @@ button:active {
   .resultScore {
     font-size: 14px;
     line-height: 1.35;
+
     margin-bottom: 8px;
   }
 
