@@ -1,465 +1,331 @@
-const titleScreen =
-  document.getElementById("titleScreen");
+function setAppHeight() {
+  const height = window.visualViewport
+    ? window.visualViewport.height
+    : window.innerHeight;
 
-const playScreen =
-  document.getElementById("playScreen");
+  document.documentElement.style.setProperty("--app-height", `${height}px`);
+}
 
-const resultScreen =
-  document.getElementById("resultScreen");
+setAppHeight();
 
-const startButton =
-  document.getElementById("startButton");
+window.addEventListener("resize", setAppHeight);
+window.addEventListener("orientationchange", setAppHeight);
 
-const retryButton =
-  document.getElementById("retryButton");
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", setAppHeight);
+  window.visualViewport.addEventListener("scroll", setAppHeight);
+}
 
-const backButton =
-  document.getElementById("backButton");
+const titleScreen = document.getElementById("titleScreen");
+const playScreen = document.getElementById("playScreen");
+const resultScreen = document.getElementById("resultScreen");
 
-const homeButton =
-  document.getElementById("homeButton");
+const startButton = document.getElementById("startButton");
+const retryButton = document.getElementById("retryButton");
+const homeButton = document.getElementById("homeButton");
+const resultHomeButton = document.getElementById("resultHomeButton");
+const pushButton = document.getElementById("pushButton");
 
-const shareButton =
-  document.getElementById("shareButton");
+const music = document.getElementById("music");
+const sokkaSound = document.getElementById("sokkaSound");
 
-const scratchButton =
-  document.getElementById("scratchButton");
+const cueText = document.getElementById("cueText");
+const grooveGauge = document.getElementById("grooveGauge");
+const timeText = document.getElementById("timeText");
+const resultScore = document.getElementById("resultScore");
+const resultRank = document.getElementById("resultRank");
+const notesContainer = document.getElementById("notesContainer");
 
-const music =
-  document.getElementById("music");
-
-const scratchSound =
-  document.getElementById("scratchSound");
-
-const goodSound =
-  document.getElementById("goodSound");
-
-const missSound =
-  document.getElementById("missSound");
-
-const record =
-  document.getElementById("record");
-
-const jacket =
-  document.getElementById("jacket");
-
-const cueText =
-  document.getElementById("cueText");
-
-const grooveGauge =
-  document.getElementById("grooveGauge");
-
-const timeText =
-  document.getElementById("timeText");
-
-const resultScore =
-  document.getElementById("resultScore");
-
-const resultImage =
-  document.getElementById("resultImage");
-
-const rankTitle =
-  document.getElementById("rankTitle");
+const game = document.getElementById("game");
 
 const notes = [
-  4,7,10,13,16,20,
-  24,28,32,36,40,
-  44,48,52
+  { time: 10.61 },
+  { time: 12.42 },
+  { time: 14.32 },
+  { time: 16.12 },
+  { time: 17.99 },
+  { time: 19.85 },
+  { time: 21.68 },
+  { time: 23.48 },
+  { time: 25.36 },
+  { time: 27.20 },
+  { time: 29.06 },
+  { time: 30.90 },
+  { time: 32.74 },
+  { time: 34.57 },
+  { time: 36.48 },
+  { time: 38.26 },
+  { time: 38.89 },
+  { time: 39.52 },
+  { time: 40.15 },
+  { time: 42.45 },
+  { time: 43.08 },
+  { time: 43.71 },
+  { time: 44.34 },
+  { time: 46.16 },
+  { time: 46.79 },
+  { time: 47.42 },
+  { time: 48.05 },
+  { time: 49.90 },
+  { time: 50.53 },
+  { time: 51.16 },
+  { time: 51.79 }
 ];
+
+const noteFallTime = 1.6;
+const judgeY = 134;
+const noteOffset = 0.15;
 
 let score = 0;
 let perfect = 0;
 let good = 0;
 let miss = 0;
-
-let currentNoteIndex = 0;
-
 let gameTimer = null;
-
 let isPlaying = false;
 
-function showScreen(screen){
+sokkaSound.volume = 0.9;
 
+function showScreen(screen) {
   titleScreen.classList.remove("active");
   playScreen.classList.remove("active");
   resultScreen.classList.remove("active");
-
   screen.classList.add("active");
+
+  setAppHeight();
 }
 
-function resetGame(){
-
+function resetGame() {
   score = 0;
   perfect = 0;
   good = 0;
   miss = 0;
-
-  currentNoteIndex = 0;
-
   isPlaying = false;
+
+  notes.forEach(note => {
+    note.hit = false;
+    note.missed = false;
+    note.element = null;
+  });
 
   music.pause();
   music.currentTime = 0;
 
-  record.className = "record";
-  jacket.className = "jacket";
-
   cueText.className = "cueText";
-  cueText.textContent = "INSERT VINYL";
+  cueText.textContent = "READY";
 
   grooveGauge.style.width = "0%";
+  timeText.textContent = "0:00 / 0:00";
+
+  notesContainer.innerHTML = "";
 
   clearInterval(gameTimer);
+
+  setAppHeight();
 }
 
-function startIntro(){
-
+function goHome() {
   resetGame();
+  showScreen(titleScreen);
+}
 
+function startGame() {
+  resetGame();
   showScreen(playScreen);
 
-  setTimeout(()=>{
+  cueText.textContent = "みんなでそっか！";
 
-    record.classList.add("slideOut");
-    jacket.classList.add("hide");
-
-    cueText.textContent =
-      "NOW LOADING...";
-
-  },500);
-
-  setTimeout(()=>{
-
-    cueText.textContent =
-      "NOW SPINNING";
-
-    record.classList.add("playing");
-
-    startMusic();
-
-  },1900);
+  setTimeout(() => {
+    cueText.textContent = "PLAY!";
+    music.play();
+    isPlaying = true;
+    gameTimer = setInterval(updateGame, 1000 / 60);
+  }, 900);
 }
 
-function startMusic(){
+function updateGame() {
+  if (!isPlaying) return;
 
-  music.play();
+  const current = music.currentTime + noteOffset;
+  const rawCurrent = music.currentTime;
+  const duration = music.duration || 1;
 
-  isPlaying = true;
+  const currentMin = Math.floor(rawCurrent / 60);
+  const currentSec = Math.floor(rawCurrent % 60).toString().padStart(2, "0");
 
-  gameTimer =
-    setInterval(updateGame,100);
-}
+  const durationMin = Math.floor(duration / 60);
+  const durationSec = Math.floor(duration % 60).toString().padStart(2, "0");
 
-function updateGame(){
+  timeText.textContent = `${currentMin}:${currentSec} / ${durationMin}:${durationSec}`;
 
-  if(!isPlaying) return;
+  notes.forEach(note => {
+    if (note.hit || note.missed) return;
 
-  const current =
-    music.currentTime;
+    const diff = note.time - current;
 
-  const duration =
-    music.duration || 1;
+    if (diff <= noteFallTime && diff >= -0.45) {
+      if (!note.element) {
+        note.element = createNoteElement();
+        notesContainer.appendChild(note.element);
+      }
 
-  const minutes =
-    Math.floor(current / 60);
-
-  const seconds =
-    Math.floor(current % 60)
-    .toString()
-    .padStart(2,"0");
-
-  const totalMinutes =
-    Math.floor(duration / 60);
-
-  const totalSeconds =
-    Math.floor(duration % 60)
-    .toString()
-    .padStart(2,"0");
-
-  timeText.textContent =
-    `${minutes}:${seconds} / ${totalMinutes}:${totalSeconds}`;
-
-  const nextNote =
-    notes[currentNoteIndex];
-
-  if(nextNote !== undefined){
-
-    const diff =
-      nextNote - current;
-
-    if(diff <= 0.8 && diff > -0.6){
-
-      cueText.textContent =
-        "SCRATCH!";
-
-      cueText.className =
-        "cueText";
+      const progress = 1 - diff / noteFallTime;
+      const y = progress * judgeY;
+      note.element.style.top = `${y}px`;
     }
 
-    if(diff <= -0.6){
-
+    if (diff < -0.45) {
+      note.missed = true;
       miss++;
 
-      currentNoteIndex++;
+      cueText.textContent = "そっか...";
+      cueText.className = "cueText miss";
 
-      cueText.textContent =
-        "MISS...";
-
-      cueText.className =
-        "cueText miss";
-
-      playSound(missSound);
+      removeNote(note);
     }
-  }
+  });
 
-  if(music.ended){
-
+  if (music.ended) {
     finishGame();
   }
 }
 
-function scratch(){
+function createNoteElement() {
+  const el = document.createElement("div");
+  el.className = "note";
+  return el;
+}
 
-  if(!isPlaying) return;
+function push() {
+  if (!isPlaying) return;
 
-  playSound(scratchSound);
+  const current = music.currentTime + noteOffset;
 
-  record.classList.remove("playing");
-  record.classList.add("scratch");
+  let target = null;
+  let bestDiff = Infinity;
 
-  setTimeout(()=>{
+  notes.forEach(note => {
+    if (note.hit || note.missed) return;
 
-    record.classList.remove("scratch");
-    record.classList.add("playing");
+    const diff = Math.abs(current - note.time);
 
-  },230);
+    if (diff < bestDiff) {
+      bestDiff = diff;
+      target = note;
+    }
+  });
 
-  const current =
-    music.currentTime;
+  if (!target) return;
 
-  const target =
-    notes[currentNoteIndex];
-
-  if(target === undefined) return;
-
-  const diff =
-    Math.abs(current - target);
-
-  if(diff <= 0.18){
-
+  if (bestDiff <= 0.16) {
     perfect++;
-
     score += 10;
+    target.hit = true;
 
-    currentNoteIndex++;
+    cueText.textContent = "PERFECT そっか！";
+    cueText.className = "cueText good";
 
-    cueText.textContent =
-      "PERFECT!";
+    playSokka();
+    markHit(target);
+    shakeScreen();
 
-    cueText.className =
-      "cueText good";
-
-    playSound(goodSound);
-
-  } else if(diff <= 0.38){
-
+  } else if (bestDiff <= 0.34) {
     good++;
-
     score += 6;
+    target.hit = true;
 
-    currentNoteIndex++;
+    cueText.textContent = "GOOD そっか！";
+    cueText.className = "cueText good";
 
-    cueText.textContent =
-      "GOOD!";
-
-    cueText.className =
-      "cueText good";
-
-    playSound(goodSound);
+    playSokka();
+    markHit(target);
 
   } else {
-
-    miss++;
-
-    score =
-      Math.max(0, score - 2);
-
-    cueText.textContent =
-      "BAD...";
-
-    cueText.className =
-      "cueText miss";
-
-    playSound(missSound);
+    cueText.textContent = "TOO EARLY";
+    cueText.className = "cueText miss";
   }
 
   updateGauge();
 }
 
-function updateGauge(){
+function shakeScreen() {
+  game.classList.add("screenShake");
 
-  const maxScore =
-    notes.length * 10;
-
-  const percent =
-    Math.min(
-      100,
-      (score / maxScore) * 100
-    );
-
-  grooveGauge.style.width =
-    `${percent}%`;
+  setTimeout(() => {
+    game.classList.remove("screenShake");
+  }, 120);
 }
 
-function playSound(audio){
-
-  audio.currentTime = 0;
-
-  audio.play().catch(()=>{});
+function playSokka() {
+  sokkaSound.currentTime = 0;
+  sokkaSound.play().catch(() => {});
 }
 
-function finishGame(){
+function markHit(note) {
+  if (note.element) {
+    note.element.classList.add("hit");
 
-  isPlaying = false;
+    setTimeout(() => {
+      removeNote(note);
+    }, 120);
+  }
+}
 
-  clearInterval(gameTimer);
-
-  music.pause();
-
-  const maxScore =
-    notes.length * 10;
-
-  const rate =
-    Math.round(
-      (score / maxScore) * 100
-    );
-
-  let rank =
-    "そっか見習い";
-
-  let image =
-    "result_bad.png";
-
-  let shareText =
-`まだまだ「そっか」修行中…🤔🎧
-
-盛り上がり ${rate}%
-
-無料ブラウザゲーム
-「みんなでそっか！」
-https://afoolhippo.github.io/game2/
-
-#みんなでそっか #カバゲーセン`;
-
-  if(rate >= 90){
-
-    rank =
-      "そっかマスター";
-
-    image =
-      "result_good.png";
-
-    shareText =
-`みんなでそっか！！！🔥🎧
-
-盛り上がり ${rate}%
-
-無料ブラウザゲーム
-「みんなでそっか！」
-https://afoolhippo.github.io/game2/
-
-#みんなでそっか #カバゲーセン`;
-
-  } else if(rate >= 60){
-
-    rank =
-      "そっか名人";
-
-    image =
-      "result_normal.png";
-
-    shareText =
-`いい感じに「そっか！」できた👍🎧
-
-盛り上がり ${rate}%
-
-無料ブラウザゲーム
-「みんなでそっか！」
-https://afoolhippo.github.io/game2/
-
-#みんなでそっか #カバゲーセン`;
+function removeNote(note) {
+  if (note.element && note.element.parentNode) {
+    note.element.parentNode.removeChild(note.element);
   }
 
-  rankTitle.textContent =
-    rank;
+  note.element = null;
+}
 
-  resultImage.src =
-    image;
+function updateGauge() {
+  const maxScore = notes.length * 10;
+  const percent = Math.min(100, (score / maxScore) * 100);
+  grooveGauge.style.width = `${percent}%`;
+}
 
-  resultScore.innerHTML =
-`
-PERFECT ${perfect}<br>
-GOOD ${good}<br>
-MISS ${miss}<br><br>
-盛り上がり ${rate}%
-`;
+function finishGame() {
+  isPlaying = false;
+  clearInterval(gameTimer);
+  music.pause();
 
-  shareButton.onclick = ()=>{
+  const maxScore = notes.length * 10;
+  const rate = Math.round((score / maxScore) * 100);
 
-    const url =
-`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+  let rank = "C";
+  let comment = "そっか...";
 
-    window.open(url,"_blank");
-  };
+  if (rate >= 90) {
+    rank = "S";
+    comment = "みんなでそっか！！";
+  } else if (rate >= 75) {
+    rank = "A";
+    comment = "ナイスそっか！";
+  } else if (rate >= 55) {
+    rank = "B";
+    comment = "GOOD そっか";
+  }
+
+  resultScore.innerHTML = `
+    PERFECT ${perfect}<br>
+    GOOD ${good}<br>
+    MISS ${miss}<br>
+    そっか率 ${rate}%
+  `;
+
+  resultRank.textContent = `RANK ${rank} - ${comment}`;
 
   showScreen(resultScreen);
 }
 
-/* イベント */
+startButton.addEventListener("click", startGame);
+retryButton.addEventListener("click", startGame);
+homeButton.addEventListener("click", goHome);
+resultHomeButton.addEventListener("click", goHome);
 
-startButton.addEventListener(
-  "click",
-  startIntro
-);
+pushButton.addEventListener("click", push);
 
-retryButton.addEventListener(
-  "click",
-  ()=>{
-
-    showScreen(titleScreen);
-  }
-);
-
-backButton.addEventListener(
-  "click",
-  ()=>{
-
-    resetGame();
-
-    showScreen(titleScreen);
-  }
-);
-
-homeButton.addEventListener(
-  "click",
-  ()=>{
-
-    location.href =
-      "https://afoolhippo.github.io/home/?skipTitle=1";
-  }
-);
-
-scratchButton.addEventListener(
-  "click",
-  scratch
-);
-
-scratchButton.addEventListener(
-  "touchstart",
-  (e)=>{
-
-    e.preventDefault();
-
-    scratch();
-  }
-);
+pushButton.addEventListener("touchstart", e => {
+  e.preventDefault();
+  push();
+});

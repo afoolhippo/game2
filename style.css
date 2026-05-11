@@ -1,43 +1,61 @@
+:root {
+  --bg: #f8838a;
+  --ink: #111111;
+  --panel: #ffd4d7;
+  --white: #ffffff;
+  --accent: #ff4d73;
+}
+
 * {
   box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
 }
 
 body {
   margin: 0;
-
-  background: #111;
-
-  color: #000;
-
-  font-family: monospace;
-
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "DotGothic16", monospace;
   display: flex;
   justify-content: center;
-  align-items: center;
-
-  min-height: 100vh;
+  align-items: flex-start;
+  min-height: var(--app-height, 100dvh);
+  padding: 4px 6px;
+  overflow: hidden;
 }
 
 #game {
-  width: min(100vw, 430px);
-  height: 100vh;
-
-  background: #f57c9d;
-
+  width: min(100%, 430px);
+  height: calc(var(--app-height, 100dvh) - 8px);
+  max-height: 820px;
+  background: var(--bg);
+  border: 5px solid var(--ink);
   overflow: hidden;
-
   position: relative;
+}
+
+.screenShake {
+  animation: shake 0.12s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
 }
 
 .screen {
   display: none;
-
   width: 100%;
   height: 100%;
-
-  padding: 18px;
-
+  padding: 16px;
   text-align: center;
 }
 
@@ -45,321 +63,287 @@ body {
   display: block;
 }
 
-/* タイトル */
-
-#titleScreen {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+h1 {
+  margin-top: 80px;
+  font-size: 44px;
+  line-height: 1.35;
 }
 
-#titleScreen.active {
-  display: flex;
-}
-
-#titleImage {
-  width: 100%;
-  max-width: 320px;
-
-  image-rendering: pixelated;
-
-  margin-bottom: 24px;
-}
-
-#ruleText {
-  font-size: 22px;
-  line-height: 1.7;
-
-  margin-bottom: 36px;
+p {
+  font-size: 15px;
 }
 
 button {
-  border: 4px solid #000;
-
-  background: #fff;
-
-  color: #000;
-
-  font-family: monospace;
-
+  font-family: "DotGothic16", monospace;
   font-size: 22px;
-
-  padding: 14px 18px;
-
+  padding: 12px 20px;
+  border: 4px solid var(--ink);
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
   cursor: pointer;
-
-  width: 100%;
-  max-width: 320px;
-
-  box-shadow: 6px 6px 0 #000;
 }
 
 button:active {
-  transform: translate(3px, 3px);
-
-  box-shadow: 3px 3px 0 #000;
+  transform: translate(4px, 4px);
+  box-shadow: 1px 1px 0 var(--ink);
 }
 
-/* プレイ */
-
-#backButton {
-  position: absolute;
-
-  top: 12px;
-  right: 12px;
-
-  width: auto;
-
-  font-size: 14px;
-
-  padding: 8px 12px;
-
-  z-index: 50;
+.smallButton {
+  font-size: 12px;
+  padding: 4px 8px;
+  opacity: 0.7;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
-.vinylArea {
-  position: relative;
-
-  width: 300px;
-  height: 300px;
-
-  margin: 60px auto 20px;
+.topBar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 6px;
 }
 
-.jacket {
-  position: absolute;
-
-  width: 190px;
-  height: 190px;
-
-  object-fit: cover;
-
-  left: 55px;
-  top: 55px;
-
-  z-index: 2;
-
-  border: 4px solid #000;
-
-  transition:
-    transform 0.8s ease,
-    opacity 0.8s ease;
+.djArea {
+  width: 100%;
+  height: 250px;
+  border: 4px solid var(--ink);
+  background: var(--bg);
+  overflow: hidden;
+  margin: 0 auto 12px;
 }
 
-.jacket.hide {
-  transform:
-    translateX(-130px)
-    scale(0.85);
-
-  opacity: 0.45;
-}
-
-.record {
-  position: absolute;
-
-  width: 230px;
-  height: 230px;
-
-  left: 35px;
-  top: 35px;
-
-  z-index: 1;
-
-  transform:
-    translateX(0)
-    rotate(0deg);
-}
-
-.record.slideOut {
-  transform:
-    translateX(95px)
-    rotate(25deg);
-
-  transition:
-    transform 1.1s ease;
-}
-
-.record.playing {
-  animation:
-    spin 1.6s linear infinite;
-}
-
-.record.scratch {
-  animation:
-    scratchMove 0.22s linear;
-}
-
-.recordImg,
-.labelImg {
-  position: absolute;
-
-  inset: 0;
-
+.djGif {
   width: 100%;
   height: 100%;
-}
-
-.recordImg {
-  object-fit: contain;
-}
-
-.labelImg {
-  width: 72px;
-  height: 72px;
-
   object-fit: cover;
-
-  border-radius: 50%;
-
-  left: 79px;
-  top: 79px;
-
-  border: 2px solid #000;
+  display: block;
 }
 
-@keyframes spin {
-  from {
-    transform:
-      translateX(95px)
-      rotate(0deg);
-  }
-
-  to {
-    transform:
-      translateX(95px)
-      rotate(360deg);
-  }
-}
-
-@keyframes scratchMove {
-  0% {
-    transform:
-      translateX(95px)
-      rotate(0deg);
-  }
-
-  50% {
-    transform:
-      translateX(95px)
-      rotate(-35deg);
-  }
-
-  100% {
-    transform:
-      translateX(95px)
-      rotate(0deg);
-  }
-}
-
-.trackInfo {
+.trackRow {
   display: flex;
-
   justify-content: space-between;
   align-items: center;
-
-  margin: 8px 0 18px;
-
-  padding-bottom: 10px;
-
-  border-bottom: 3px solid #000;
-
-  font-size: 18px;
+  margin-bottom: 10px;
+  padding: 0 2px;
 }
 
 #trackTitle {
-  font-size: 22px;
+  font-size: 20px;
+  margin: 0;
 }
 
 #timeText {
   font-size: 16px;
 }
 
+.noteLane {
+  position: relative;
+  height: 185px;
+  border: 4px solid var(--ink);
+  overflow: hidden;
+  margin: 10px 0;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+#notesContainer {
+  position: absolute;
+  inset: 0;
+}
+
+.note {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 42%;
+  height: 12px;
+  background: var(--white);
+  border: none;
+  border-radius: 999px;
+  box-shadow: none;
+}
+
+.note.hit {
+  background: var(--accent);
+}
+
+.judgeLine {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 22px;
+  height: 4px;
+  background: var(--ink);
+}
+
 .cueText {
-  height: 44px;
-
-  font-size: 30px;
-
-  margin: 18px 0;
-
-  font-weight: bold;
+  min-height: 32px;
+  font-size: 24px;
+  margin: 10px 0;
 }
 
 .cueText.good {
-  color: #00aa00;
+  color: var(--white);
 }
 
 .cueText.miss {
-  color: #aa0000;
+  opacity: 0.7;
 }
 
-#scratchButton {
-  margin: 0 auto 28px;
+#pushButton {
+  width: 86%;
+  margin: 8px auto 16px;
+  display: block;
+  font-size: 30px;
+  background: var(--white);
 }
 
 .gaugeBox {
-  margin-top: 20px;
-
+  margin-top: 6px;
   text-align: left;
-
-  font-size: 18px;
 }
 
-.gaugeBox span {
-  display: block;
-
-  margin-bottom: 10px;
+.gaugeLabel {
+  font-size: 16px;
+  margin-bottom: 6px;
 }
 
 .gaugeOuter {
-  height: 26px;
-
-  border: 3px solid #000;
-
-  background: #fff;
+  height: 20px;
+  border: 3px solid var(--ink);
+  background: var(--white);
 }
 
 .gaugeInner {
-  width: 0%;
   height: 100%;
-
-  background: #000;
-
-  transition: width 0.15s;
+  width: 0%;
+  background: var(--ink);
 }
 
-/* リザルト */
-
-#resultScreen {
-  padding-top: 40px;
-}
-
-#rankTitle {
-  font-size: 36px;
-
-  margin-bottom: 20px;
-}
-
-#resultImage {
-  width: 240px;
-
-  image-rendering: pixelated;
-
-  margin-bottom: 24px;
-}
-
-#resultScore {
+#resultScreen p {
   font-size: 22px;
-
-  line-height: 1.8;
-
-  margin-bottom: 28px;
+  line-height: 1.7;
 }
 
-.resultButtons {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+#resultHomeButton {
+  margin-top: 16px;
+}
 
-  align-items: center;
+/* =========================
+   高さが少し足りないスマホ向け
+========================= */
+
+@media (max-height: 760px) {
+  .screen {
+    padding: 10px 12px;
+  }
+
+  h1 {
+    margin-top: 52px;
+    font-size: 38px;
+  }
+
+  .topBar {
+    margin-bottom: 4px;
+  }
+
+  .djArea {
+    height: 210px;
+    margin-bottom: 8px;
+  }
+
+  .trackRow {
+    margin-bottom: 6px;
+  }
+
+  .noteLane {
+    height: 170px;
+    margin: 8px 0;
+  }
+
+  .cueText {
+    min-height: 26px;
+    font-size: 21px;
+    margin: 6px 0;
+  }
+
+  #pushButton {
+    font-size: 26px;
+    padding: 9px 16px;
+    margin: 6px auto 10px;
+  }
+
+  .gaugeBox {
+    margin-top: 2px;
+  }
+
+  .gaugeLabel {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .gaugeOuter {
+    height: 17px;
+  }
+
+  #resultScreen p {
+    font-size: 19px;
+    line-height: 1.55;
+  }
+
+  #resultHomeButton {
+    margin-top: 10px;
+  }
+}
+
+/* =========================
+   さらに低い端末向け
+========================= */
+
+@media (max-height: 680px) {
+  .screen {
+    padding: 8px 10px;
+  }
+
+  h1 {
+    margin-top: 36px;
+    font-size: 34px;
+  }
+
+  .djArea {
+    height: 180px;
+  }
+
+  .noteLane {
+    height: 155px;
+  }
+
+  #trackTitle {
+    font-size: 17px;
+  }
+
+  #timeText {
+    font-size: 13px;
+  }
+
+  .cueText {
+    font-size: 19px;
+    margin: 5px 0;
+  }
+
+  #pushButton {
+    font-size: 24px;
+    padding: 8px 14px;
+    margin-bottom: 8px;
+  }
+
+  button {
+    font-size: 19px;
+    padding: 9px 16px;
+  }
+
+  #resultScreen p {
+    font-size: 17px;
+    line-height: 1.45;
+  }
 }
