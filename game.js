@@ -26,6 +26,8 @@ const startButton = document.getElementById("startButton");
 const retryButton = document.getElementById("retryButton");
 const homeButton = document.getElementById("homeButton");
 const shareButton = document.getElementById("shareButton");
+const registerButton = document.getElementById("registerButton");
+const resultButtons = document.getElementById("resultButtons");
 const arcadeButton = document.getElementById("arcadeButton");
 const pushButton = document.getElementById("pushButton");
 
@@ -91,6 +93,14 @@ let good = 0;
 let miss = 0;
 let lastRate = 0;
 let lastTitle = "";
+  resultButtons.classList.add("hidden");
+
+  registerButton.disabled = false;
+  registerButton.textContent = "記録を登録";
+resultButtons.classList.add("hidden");
+
+registerButton.disabled = false;
+registerButton.textContent = "記録を登録";
 let gameTimer = null;
 let isPlaying = false;
 let isStarting = false;
@@ -277,6 +287,14 @@ function push() {
   updateGauge();
 }
 
+function showResultButtonsLater() {
+  resultButtons.classList.add("hidden");
+
+  setTimeout(() => {
+    resultButtons.classList.remove("hidden");
+  }, 1500);
+}
+
 function shakeScreen() {
   game.classList.add("screenShake");
 
@@ -356,7 +374,8 @@ function finishGame() {
     そっか率 ${rate}%
   `;
 
-  showScreen(resultScreen);
+showScreen(resultScreen);
+showResultButtonsLater();
 }
 
 function shareResult() {
@@ -430,4 +449,14 @@ pushButton.addEventListener("click", push);
 pushButton.addEventListener("touchstart", e => {
   e.preventDefault();
   push();
+});
+
+registerButton.addEventListener("click", () => {
+
+  if (registerButton.disabled) return;
+
+  registerButton.disabled = true;
+  registerButton.textContent = "登録しました";
+
+  console.log("スコア登録");
 });
