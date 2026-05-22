@@ -46,8 +46,22 @@ const resultScore = document.getElementById("resultScore");
 const notesContainer = document.getElementById("notesContainer");
 const game = document.getElementById("game");
 
+const GAME_ID = "game2";
+const GAME_TITLE = "みんなでそっか！";
+
 const GAME_URL = "https://afoolhippo.github.io/game2/";
 const ARCADE_URL = "https://afoolhippo.github.io/home/?skipTitle=1";
+
+const SUPABASE_URL =
+  "https://gmncxnybsovlallxgnkd.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_ly3h5OhL8HDSHhYdmJq_Fw_9pG3mhla";
+
+const kabaDb = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
 
 const notes = [
   { time: 10.61 },
@@ -93,14 +107,8 @@ let good = 0;
 let miss = 0;
 let lastRate = 0;
 let lastTitle = "";
-  resultButtons.classList.add("hidden");
+let scoreRegistered = false;
 
-  registerButton.disabled = false;
-  registerButton.textContent = "記録を登録";
-resultButtons.classList.add("hidden");
-
-registerButton.disabled = false;
-registerButton.textContent = "記録を登録";
 let gameTimer = null;
 let isPlaying = false;
 let isStarting = false;
@@ -123,6 +131,8 @@ function resetGame() {
   miss = 0;
   lastRate = 0;
   lastTitle = "";
+  scoreRegistered = false;
+
   isPlaying = false;
   isStarting = false;
 
@@ -142,6 +152,11 @@ function resetGame() {
   timeText.textContent = "0:00 / 0:00";
 
   notesContainer.innerHTML = "";
+
+  resultButtons.classList.add("hidden");
+
+  registerButton.disabled = false;
+  registerButton.textContent = "記録を登録";
 
   clearInterval(gameTimer);
 
@@ -374,8 +389,8 @@ function finishGame() {
     そっか率 ${rate}%
   `;
 
-showScreen(resultScreen);
-showResultButtonsLater();
+  showScreen(resultScreen);
+  showResultButtonsLater();
 }
 
 function shareResult() {
@@ -432,6 +447,48 @@ ${GAME_URL}
   window.open(shareUrl, "_blank");
 }
 
+async function registerScore() {
+  if (scoreRegistered) {
+    alert("この記録は登録済みです");
+    return;
+  }
+
+  const nickname = prompt(
+    "ニックネームを入力してね",
+    "匿名カバ"
+  );
+
+  if (!nickname) return;
+
+  registerButton.disabled = true;
+  registerButton.textContent = "登録中...";
+
+  const { error } = await kabaDb
+    .from("kaba_scores")
+    .insert({
+      game_id: GAME_ID,
+      game_title: GAME_TITLE,
+      nickname: nickname,
+      rank_title: lastTitle,
+      score: lastRate
+    });
+
+  if (error) {
+    console.error(error);
+
+    registerButton.disabled = false;
+    registerButton.textContent = "記録を登録";
+
+    alert("登録に失敗しました");
+    return;
+  }
+
+  scoreRegistered = true;
+  registerButton.textContent = "登録済み";
+
+  alert("記録を登録しました！");
+}
+
 startButton.addEventListener("click", startGame);
 titleLogo.addEventListener("click", startGame);
 
@@ -439,6 +496,7 @@ retryButton.addEventListener("click", goTitle);
 homeButton.addEventListener("click", goTitle);
 
 shareButton.addEventListener("click", shareResult);
+registerButton.addEventListener("click", registerScore);
 
 arcadeButton.addEventListener("click", () => {
   location.href = ARCADE_URL;
@@ -449,14 +507,4 @@ pushButton.addEventListener("click", push);
 pushButton.addEventListener("touchstart", e => {
   e.preventDefault();
   push();
-});
-
-registerButton.addEventListener("click", () => {
-
-  if (registerButton.disabled) return;
-
-  registerButton.disabled = true;
-  registerButton.textContent = "登録しました";
-
-  console.log("スコア登録");
 });

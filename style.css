@@ -68,6 +68,11 @@ button:active {
   box-shadow: 1px 1px 0 var(--ink);
 }
 
+button:disabled {
+  opacity: 0.75;
+  cursor: default;
+}
+
 /* TITLE */
 
 .titleInner {
@@ -315,8 +320,6 @@ button:active {
   100% { transform: translateX(0); }
 }
 
-/* HEIGHT SHORT */
-
 @media (max-height: 760px) {
   .screen {
     padding: 10px 12px;
@@ -348,10 +351,6 @@ button:active {
     margin-bottom: 8px;
   }
 
-  .trackRow {
-    margin-bottom: 6px;
-  }
-
   .noteLane {
     height: 170px;
     margin: 8px 0;
@@ -369,19 +368,6 @@ button:active {
     margin: 6px auto 10px;
   }
 
-  .gaugeBox {
-    margin-top: 2px;
-  }
-
-  .gaugeLabel {
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-
-  .gaugeOuter {
-    height: 17px;
-  }
-
   .resultCharacter {
     width: min(38%, 140px);
     max-height: 140px;
@@ -391,19 +377,9 @@ button:active {
     font-size: 27px;
   }
 
-  .resultComment {
-    font-size: 15px;
-  }
-
   .resultScore {
     font-size: 15px;
     line-height: 1.4;
-    padding: 7px 8px;
-  }
-
-  .resultButtons {
-    gap: 8px;
-    margin-top: 6px;
   }
 
   .resultButton {
@@ -418,22 +394,8 @@ button:active {
     padding: 8px 10px;
   }
 
-  .titleInner {
-    padding-top: 10px;
-  }
-
   .titleLogo {
     max-height: 220px;
-  }
-
-  .ruleText {
-    font-size: 14px;
-    line-height: 1.42;
-  }
-
-  .mainButton {
-    font-size: 18px;
-    padding: 9px 16px;
   }
 
   .djArea {
@@ -475,7 +437,6 @@ button:active {
 
   .resultComment {
     font-size: 14px;
-    margin-bottom: 5px;
   }
 
   .resultScore {
